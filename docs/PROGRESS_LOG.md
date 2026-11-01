@@ -23,6 +23,7 @@ Newest entries last. Update this file at the end of every working session.
 - Hero art is now the Guacado avatar (`public/Guacado_Avatar.jfif` -> `public/media/avatar.jpg`) centred, with the two food photos (`hero-1/2.jpg`) around him where the cartoon illustrations used to be. Cartoon avocado disc and illustrations removed from the hero.
 - `components/ui/HeroAvatar.vue`: eyes and head follow the cursor (finger on touch); after 3.5 s without a pointer he glances around by himself; reduced motion = looks straight ahead. The painted irises are hidden by a patch and a moving iris/pupil is drawn in SVG; geometry in `data/avatarEyes.js` (original 1792x2400 coordinates). Placement was checked with an offline render of the same geometry, not in a browser.
 - Black backdrops of the avatar and photos are removed with `mix-blend-mode: screen` (on the outer wrapper, so the blend reaches the page).
+- **Heart eyes:** hovering or focusing a Menu / Order link or button (any, via event delegation, `isLoveTarget`) swaps his eyes for the hearts from `Guacado Avatar 2` (`media/avatar-love.jpg`, clipped to each eye by `HEARTS` in `data/avatarEyes.js`); they pop in and beat. Works with reduced motion (no beat).
 
 ## 2026-11-02 — Session 5: scroll-scrubbed taco video (`#taco`)
 

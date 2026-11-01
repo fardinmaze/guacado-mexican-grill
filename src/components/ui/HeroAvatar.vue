@@ -1,12 +1,21 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { AVATAR, irisCentre } from '@/data/avatarEyes'
+import { AVATAR, HEARTS, irisCentre, isLoveTarget } from '@/data/avatarEyes'
 import { gsap, prefersReducedMotion } from '@/composables/useMotion'
 
 // The Guacado mascot. His eyes and head follow the cursor (or a finger on touch screens); with no
 // pointer for a few seconds he glances around on his own. Under reduced motion he simply looks ahead.
 // The painted irises are hidden by a patch, and a moving iris + pupil is drawn on top (see data/avatarEyes.js).
 const photo = '/media/avatar.jpg'
+const lovePhoto = '/media/avatar-love.jpg' // same pose with heart eyes
+const love = ref(false) // the cursor (or keyboard focus) is on Menu / Order
+
+// Percent geometry so the heart layers scale with the picture.
+const pct = (v, of) => `${((v / of) * 100).toFixed(3)}%`
+const heartStyle = (h) => ({
+  clipPath: `ellipse(${pct(h.rx, AVATAR.w)} ${pct(h.ry, AVATAR.h)} at ${pct(h.cx, AVATAR.w)} ${pct(h.cy, AVATAR.h)})`,
+  transformOrigin: `${pct(h.cx, AVATAR.w)} ${pct(h.cy, AVATAR.h)}`,
+})
 const root = ref(null)
 const tilt = ref(null)
 const irises = ref([])
@@ -29,6 +38,8 @@ function aim(clientX, clientY) {
   last = performance.now()
 }
 const onMove = (e) => aim(e.clientX, e.clientY)
+const onOver = (e) => { if (isLoveTarget(e.target)) love.value = true }
+const onOut = (e) => { if (isLoveTarget(e.target) && !isLoveTarget(e.relatedTarget)) love.value = false }
 
 function paint() {
   AVATAR.eyes.forEach((eye, i) => {
@@ -42,6 +53,11 @@ function paint() {
 
 onMounted(() => {
   paint()
+  // Hearts also work with reduced motion (they just don't pulse) and with the keyboard.
+  document.addEventListener('pointerover', onOver)
+  document.addEventListener('pointerout', onOut)
+  document.addEventListener('focusin', onOver)
+  document.addEventListener('focusout', onOut)
   if (prefersReducedMotion()) return
   addEventListener('pointermove', onMove, { passive: true })
   addEventListener('pointerdown', onMove, { passive: true })
@@ -60,6 +76,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  document.removeEventListener('pointerover', onOver)
+  document.removeEventListener('pointerout', onOut)
+  document.removeEventListener('focusin', onOver)
+  document.removeEventListener('focusout', onOut)
   removeEventListener('pointermove', onMove)
   removeEventListener('pointerdown', onMove)
   if (tick) gsap.ticker.remove(tick)
@@ -67,10 +87,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="root" class="av">
+  <div ref="root" class="av" :class="{ 'is-love': love }">
     <div class="av__bob">
       <div ref="tilt" class="av__tilt">
         <img class="av__img" :src="photo" alt="" :width="1100" :height="1473" fetchpriority="high" />
+        <img v-for="(h, i) in HEARTS" :key="i" class="av__heart" :src="lovePhoto" alt="" :style="heartStyle(h)" width="1100" height="1473" />
         <svg class="av__eyes" :viewBox="`0 0 ${AVATAR.w} ${AVATAR.h}`" aria-hidden="true">
           <defs>
             <radialGradient id="av-white" cx="50%" cy="50%" r="50%">
@@ -113,5 +134,17 @@ onBeforeUnmount(() => {
 .av__tilt { position: relative; transform-style: preserve-3d; will-change: transform; transform-origin: 50% 70%; }
 /* The artwork has a pure-black backdrop; the screen blend on .av removes it. */
 .av__img { display: block; width: 100%; height: 100%; }
-.av__eyes { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.av__eyes { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity 0.12s; }
+
+/* Heart eyes: the love picture, clipped to each eye, pops in over the painted eyes and beats. */
+.av__heart { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transform: scale(0.4); pointer-events: none; transition: opacity 0.15s, transform 0.35s cubic-bezier(0.34, 1.9, 0.5, 1); z-index: 2; }
+.is-love .av__heart { opacity: 1; transform: scale(1); animation: beat 0.9s 0.35s ease-in-out infinite; }
+.is-love .av__eyes { opacity: 0; }
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.16); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  60% { transform: scale(1); }
+}
 </style>

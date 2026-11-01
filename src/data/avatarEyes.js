@@ -17,3 +17,20 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v))
 export function irisCentre(eye, gx, gy) {
   return { x: eye.cx + clamp(gx, -1, 1) * eye.travel.x, y: eye.cy + clamp(gy, -1, 1) * eye.travel.y }
 }
+
+// Where the painted hearts sit in the "love" artwork (same pose, heart eyes). The love picture is
+// clipped to these ellipses so only the eyes change; everything else is identical in both pictures.
+export const HEARTS = [
+  { cx: 752, cy: 808, rx: 74, ry: 78 },
+  { cx: 948, cy: 790, rx: 86, ry: 76 },
+]
+
+/** True for the things that make him fall in love: the Menu and Order links/buttons. */
+export function isLoveTarget(el, orderHost = 'order.online') {
+  const a = el?.closest?.('a, button')
+  if (!a) return false
+  const href = a.getAttribute('href') || ''
+  if (href === '/menu' || href === '/order' || href.startsWith('/order/')) return true
+  if (href.includes(orderHost)) return true
+  return /^(menu|order( online| for pickup| this online)?)$/i.test(a.textContent.replace(/[^\w ]/g, '').trim())
+}
