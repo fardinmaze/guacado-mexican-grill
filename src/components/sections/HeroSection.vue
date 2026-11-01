@@ -2,10 +2,11 @@
 import { ref } from 'vue'
 import { site } from '@/data/site'
 import { useMotion } from '@/composables/useMotion'
-import { tacos, birria, tostada } from '@/assets/illustrations'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import HeroAvatar from '@/components/ui/HeroAvatar.vue'
 
 const root = ref(null)
+const photos = { dip: '/media/hero-1.jpg', tacos: '/media/hero-2.jpg' } // served from public/
 
 // Load timeline, idle float, stamp spin and scroll parallax (BRAND.md §9).
 // All animate FROM a visible state, so content is readable if motion is skipped.
@@ -13,21 +14,18 @@ useMotion(root, ({ gsap }) => {
   const tl = gsap.timeline({ defaults: { ease: 'power4.out' } })
   tl.from('.ln > span', { yPercent: 110, duration: 1, stagger: 0.08 })
     .from('[data-hero]', { y: 24, opacity: 0, duration: 0.7, stagger: 0.07 }, '-=.7')
-    .from('.avo', { scale: 0.6, rotate: -12, opacity: 0, duration: 1.1, ease: 'elastic.out(1,.7)' }, 0.1)
-    .from('.pit', { scale: 0, duration: 0.8, ease: 'back.out(2.4)' }, 0.5)
-    .from('.f-tacos', { x: -120, y: 60, rotate: -20, opacity: 0, duration: 1 }, 0.35)
-    .from('.f-birria', { x: 120, y: -40, rotate: 18, opacity: 0, duration: 1 }, 0.45)
-    .from('.f-tostada', { y: 120, rotate: 12, opacity: 0, duration: 1 }, 0.55)
+    .from('.hero-av', { scale: 0.7, y: 70, rotate: -5, opacity: 0, duration: 1.4, ease: 'elastic.out(1,.75)' }, 0.1)
+    .from('.f-dip', { x: 120, y: -40, rotate: 8, scale: 0.85, opacity: 0, duration: 1.2 }, 0.3)
+    .from('.f-tacos', { x: -120, y: 60, rotate: -8, scale: 0.85, opacity: 0, duration: 1.2 }, 0.45)
     .from('.stamp', { scale: 0, rotate: -90, duration: 0.9, ease: 'back.out(1.8)' }, 0.7)
 
   const float = { sine: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.4 }
-  gsap.to('.f-tacos', { y: '-=14', rotate: -3, duration: 3.2, ease: float.sine, ...float })
-  gsap.to('.f-birria', { y: '+=12', rotate: 4, duration: 2.8, ease: float.sine, ...float })
-  gsap.to('.f-tostada', { y: '-=10', duration: 3.6, ease: float.sine, ...float })
+  gsap.to('.f-tacos', { y: '-=12', rotate: -1.5, duration: 3.2, ease: float.sine, ...float })
+  gsap.to('.av__bob', { y: -10, duration: 3.4, ease: float.sine, ...float })
+  gsap.to('.f-dip', { y: '+=12', rotate: 1.5, duration: 2.8, ease: float.sine, ...float })
   gsap.to('.stamp text', { rotate: 360, transformOrigin: '80px 80px', duration: 22, repeat: -1, ease: 'none' })
 
   const scrub = { trigger: root.value, start: 'top top', end: 'bottom top', scrub: true }
-  gsap.to('.avo', { yPercent: 12, ease: 'none', scrollTrigger: scrub })
   gsap.to('.float', { yPercent: -25, ease: 'none', stagger: 0.1, scrollTrigger: scrub })
 })
 </script>
@@ -57,16 +55,15 @@ useMotion(root, ({ gsap }) => {
       </div>
 
       <div class="hero__art" aria-hidden="true">
-        <div class="avo"><div class="pit" /></div>
         <svg class="stamp" viewBox="0 0 160 160">
           <defs><path id="stamp-circ" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0" /></defs>
           <circle cx="80" cy="80" r="78" fill="#0a120e" stroke="#c8d82c" stroke-width="2" />
           <text><textPath href="#stamp-circ">FRESH · GRILLED · BUILT YOUR WAY · </textPath></text>
           <circle cx="80" cy="80" r="18" fill="#874c1b" />
         </svg>
-        <img class="float f-tacos" :src="tacos" alt="" />
-        <img class="float f-birria" :src="birria" alt="" />
-        <img class="float f-tostada" :src="tostada" alt="" />
+        <img class="float f-dip" :src="photos.dip" alt="" width="1400" height="1045" fetchpriority="high" />
+        <img class="float f-tacos" :src="photos.tacos" alt="" width="1400" height="1045" fetchpriority="high" />
+        <HeroAvatar class="hero-av" />
       </div>
     </div>
   </section>
@@ -102,36 +99,18 @@ h1 {
 .bang { color: var(--lime); }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
-.hero__art { position: relative; aspect-ratio: 1 / 1; max-width: 560px; width: 100%; justify-self: center; }
-.avo {
+.hero__art { position: relative; aspect-ratio: 4 / 5; max-width: 560px; width: 100%; justify-self: center; }
+.hero-av { position: absolute; z-index: 2; left: 6%; top: 3%; width: 88%; aspect-ratio: 1792 / 2400; }
+/* Photos sit on pure black: screen-blend them into the page and feather the edges. */
+.float {
   position: absolute;
-  inset: 6% 8%;
-  border-radius: 50% 50% 46% 46% / 56% 56% 44% 44%;
-  background: var(--guac);
-  box-shadow: inset 0 0 0 14px var(--lime), inset 0 0 0 34px var(--leaf);
+  height: auto;
+  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
 }
-.avo::before {
-  content: '';
-  position: absolute;
-  inset: 34px;
-  border-radius: inherit;
-  background: radial-gradient(circle at 50% 42%, #d9e47a 0, var(--leaf) 70%);
-}
-.pit {
-  position: absolute;
-  left: 50%;
-  top: 52%;
-  width: 36%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle at 35% 30%, #b06a2c 0, var(--pit) 55%, #5e3412 100%);
-  box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.6);
-}
-.float { position: absolute; filter: drop-shadow(0 22px 30px rgba(0, 0, 0, 0.55)); }
-.f-tacos { width: 62%; left: -6%; bottom: 2%; }
-.f-birria { width: 44%; right: -4%; top: 2%; }
-.f-tostada { width: 40%; right: 2%; bottom: -2%; }
-.stamp { position: absolute; left: 0; top: 4%; width: 30%; transform: rotate(-12deg); }
+.f-dip { z-index: 1; width: 56%; right: -10%; top: -3%; }
+.f-tacos { z-index: 1; width: 70%; left: -14%; bottom: -3%; }
+.stamp { position: absolute; z-index: 3; left: 0; top: 4%; width: 30%; transform: rotate(-12deg); }
 .stamp text { font-family: var(--f-cond); letter-spacing: 4px; font-size: 15px; fill: var(--ink); }
 </style>

@@ -18,6 +18,12 @@ Newest entries last. Update this file at the end of every working session.
 
 ---
 
+## 2026-11-02 — Session 6: hero reimagined with the mascot
+
+- Hero art is now the Guacado avatar (`public/Guacado_Avatar.jfif` -> `public/media/avatar.jpg`) centred, with the two food photos (`hero-1/2.jpg`) around him where the cartoon illustrations used to be. Cartoon avocado disc and illustrations removed from the hero.
+- `components/ui/HeroAvatar.vue`: eyes and head follow the cursor (finger on touch); after 3.5 s without a pointer he glances around by himself; reduced motion = looks straight ahead. The painted irises are hidden by a patch and a moving iris/pupil is drawn in SVG; geometry in `data/avatarEyes.js` (original 1792x2400 coordinates). Placement was checked with an offline render of the same geometry, not in a browser.
+- Black backdrops of the avatar and photos are removed with `mix-blend-mode: screen` (on the outer wrapper, so the blend reaches the page).
+
 ## 2026-11-02 — Session 5: scroll-scrubbed taco video (`#taco`)
 
 Reference approach taken from the Mojito project (scroll drives a video's `currentTime`, clip encoded with every frame a keyframe). New section right after the ticker, centred, `TacoScroll.vue` + `data/tacoScroll.js`.
