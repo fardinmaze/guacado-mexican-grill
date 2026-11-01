@@ -28,7 +28,7 @@ describe('App smoke test', () => {
   it('renders every home section in BRAND.md §8 order', async () => {
     const { wrapper } = await mountAt('/')
     const ids = [...wrapper.element.querySelectorAll('section[id]')].map((s) => s.id)
-    expect(ids).toEqual(['build', 'favorites', 'menu', 'kits', 'catering', 'locations', 'join'])
+    expect(ids).toEqual(['taco', 'build', 'favorites', 'menu', 'kits', 'catering', 'locations', 'join'])
     expect(wrapper.find('h1').attributes('aria-label')).toBe('Build your own!')
     wrapper.unmount()
   })

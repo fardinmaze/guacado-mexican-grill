@@ -18,6 +18,17 @@ Newest entries last. Update this file at the end of every working session.
 
 ---
 
+## 2026-11-02 — Session 5: scroll-scrubbed taco video (`#taco`)
+
+Reference approach taken from the Mojito project (scroll drives a video's `currentTime`, clip encoded with every frame a keyframe). New section right after the ticker, centred, `TacoScroll.vue` + `data/tacoScroll.js`.
+
+- **Footage:** owner's `public/Video/gemini_generated_video_60ff5ac9.mp4` (taco built on black: shell, chicken, lettuce, tomato, onion/cilantro, cheese, sauce, folds). Re-encoded to `public/media/taco-build.mp4` (960x540, no audio, `-g 1`, 2.8 MB) + `taco-poster.jpg` (last frame). The original stays in `public/Video/` (git-ignored).
+- **Black background:** the clip has no alpha (MP4 cannot), so `mix-blend-mode: screen` plus a soft mask lets the black melt into the page ground.
+- **Steps** (side rail + caption) are timed in `data/tacoScroll.js` (`at` = second). Wording describes the footage, not the menu.
+- **No motion / no JS:** normal-height section showing the finished taco and the full step list.
+- Not yet seen in a browser. Check pacing (`55vh` per step), phone layout, and blend on the real background.
+- Re-encode command: `ffmpeg -i in.mp4 -an -vf scale=960:-2 -c:v libx264 -crf 23 -g 1 -pix_fmt yuv420p -movflags +faststart out.mp4`
+
 ## 2026-11-02 — Session 3: scroll "making of" removed
 
 Both attempts (drawn SVG, then video-scrubbed) were removed at the owner's request; the home page is back to the original 9 sections. Deleted: `MakingProcess`, `components/process/`, `data/recipes.js`, `utils/recipe.js`, `scatter.js`, `videoMap.js`, `tests/process.test.js`. The two clips remain in `public/` (unused). Session 2 below is kept as history.
