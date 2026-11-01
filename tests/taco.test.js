@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { stepAt, tacoScroll } from '@/data/tacoScroll'
+import { PLAY_SHARE, clipTime, stepAt, tacoScroll } from '@/data/tacoScroll'
 
 describe('tacoScroll', () => {
   const { steps, duration } = tacoScroll
@@ -15,5 +15,17 @@ describe('tacoScroll', () => {
     expect(stepAt(steps, 1.4)).toBe(1)
     expect(stepAt(steps, 6.9)).toBe(5)
     expect(stepAt(steps, 9.95)).toBe(steps.length - 1)
+  })
+  it('every step has tags with a known tone', () => {
+    steps.forEach((s) => {
+      expect(s.tags.length).toBeGreaterThan(0)
+      s.tags.forEach((g) => expect(['lime', 'chili', 'leaf', 'ink']).toContain(g.tone))
+    })
+  })
+  it('scroll maps to the clip, then holds the last frame for the finale', () => {
+    expect(clipTime(0, 10)).toBe(0)
+    expect(clipTime(PLAY_SHARE, 10)).toBeCloseTo(9.95)
+    expect(clipTime(1, 10)).toBeCloseTo(9.95)
+    expect(clipTime(PLAY_SHARE / 2, 10)).toBeCloseTo(4.975)
   })
 })

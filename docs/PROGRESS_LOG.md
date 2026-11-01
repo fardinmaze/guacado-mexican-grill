@@ -22,12 +22,13 @@ Newest entries last. Update this file at the end of every working session.
 
 Reference approach taken from the Mojito project (scroll drives a video's `currentTime`, clip encoded with every frame a keyframe). New section right after the ticker, centred, `TacoScroll.vue` + `data/tacoScroll.js`.
 
-- **Footage:** owner's `public/Video/gemini_generated_video_60ff5ac9.mp4` (taco built on black: shell, chicken, lettuce, tomato, onion/cilantro, cheese, sauce, folds). Re-encoded to `public/media/taco-build.mp4` (960x540, no audio, `-g 1`, 2.8 MB) + `taco-poster.jpg` (last frame). The original stays in `public/Video/` (git-ignored).
+- **Footage:** owner's `public/Video/gemini_generated_video_60ff5ac9.mp4` (taco built on black: shell, chicken, lettuce, tomato, onion/cilantro, cheese, sauce, folds). Re-encoded to `public/media/taco-build.mp4` (1280x720, no audio, `-g 1, crf 18`) + `taco-poster.jpg` (last frame). The original stays in `public/Video/` (git-ignored).
 - **Black background:** the clip has no alpha (MP4 cannot), so `mix-blend-mode: screen` plus a soft mask lets the black melt into the page ground.
 - **Steps** (side rail + caption) are timed in `data/tacoScroll.js` (`at` = second). Wording describes the footage, not the menu.
 - **No motion / no JS:** normal-height section showing the finished taco and the full step list.
 - Not yet seen in a browser. Check pacing (`55vh` per step), phone layout, and blend on the real background.
-- Re-encode command: `ffmpeg -i in.mp4 -an -vf scale=960:-2 -c:v libx264 -crf 23 -g 1 -pix_fmt yuv420p -movflags +faststart out.mp4`
+- Re-encode command: `ffmpeg -i in.mp4 -an -c:v libx264 -preset slow -crf 18 -g 1 -pix_fmt yuv420p -movflags +faststart out.mp4`
+- **Rework (full-window):** the stage now fills the screen (video zoomed, `screen`-blended); giant step words sit behind the food and fade/rise in and out per step; sticker tags and a note sit in front; "Folded & ready" adds a READY stamp, sparkle burst, zoom and CTA buttons. The last 10% of scroll holds the final frame so the finale can play (`PLAY_SHARE`). Not yet seen in a browser.
 
 ## 2026-11-02 — Session 3: scroll "making of" removed
 
