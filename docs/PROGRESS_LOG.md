@@ -108,3 +108,10 @@ Conclusion: the reference page is the behavioural spec; this project ports it to
 6. Franchise page, once copy exists.
 7. Optional: ESLint + Prettier, CI running `npm test && npm run build`, `git init` (the folder is not yet a repository).
 8. Optional features: persist the builder selection, "copy my order" summary, light theme toggle (tokens already exist).
+
+## Session 7 - New scroll footage: burrito bowl (client video 3)
+
+- **Footage:** client's `public/Scroll Animation_Video 3.mp4` (19.5 s, 1280x720: an empty bowl built up layer by layer, then finished). Re-encoded to `public/media/bowl-build.mp4` (no audio, `-g 1`, crf 20, all keyframes so seeking is instant) + `bowl-poster.jpg` (last frame). The original stays in `public/` (git-ignored via `public/*.mp4`). The older taco clip is retired.
+- **Steps (12), timed to the footage:** The bowl, Yellow rice, Black beans, Grilled chicken, Peppers & onions, Sweet corn, Tomato & cheese, Guacamole, Sour cream, Sauce, Cilantro, Ready to eat. Wording only describes what is on screen.
+- **Layout:** the bowl sits low in the frame, so the video is anchored at the bottom with the zoom origin moved down (it would otherwise be cropped), and scroll per step is 52vh (12 steps).
+- Tests updated for the 19.5 s clip (33 passing); `vite build` OK. Not yet checked visually in a browser.

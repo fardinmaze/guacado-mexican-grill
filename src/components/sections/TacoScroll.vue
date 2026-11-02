@@ -8,7 +8,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 // Full-window scroll-scrubbed video. Scrolling moves the video's currentTime (the clip is encoded with
 // every frame a keyframe, so seeking is instant). Giant step words sit BEHIND the food: the footage is
 // blended with `screen`, so its black lets the type show through. Sticker tags sit in front.
-// No reduced motion / no JS: one normal-height screen with the finished taco and the step list.
+// No reduced motion / no JS: one normal-height screen with the finished bowl and the step list.
 const { src, poster, steps } = tacoScroll
 const LAST = steps.length - 1
 const root = ref(null)
@@ -70,7 +70,7 @@ useMotion(root, ({ gsap, ScrollTrigger: ST, root: el }) => {
 </script>
 
 <template>
-  <section id="taco" ref="root" class="taco" :class="{ 'is-live': live }" :style="{ '--n': steps.length }" aria-label="How a taco is made">
+  <section id="taco" ref="root" class="taco" :class="{ 'is-live': live }" :style="{ '--n': steps.length }" aria-label="How a burrito bowl is made">
     <div class="pin" :class="{ 'is-finale': finale }">
       <!-- 1. Giant words (behind the food) -->
       <div class="words" aria-hidden="true">
@@ -85,7 +85,7 @@ useMotion(root, ({ gsap, ScrollTrigger: ST, root: el }) => {
       </div>
 
       <!-- 2. The footage -->
-      <video ref="video" class="clip" :src="src" :poster="poster" muted playsinline preload="auto" disablepictureinpicture aria-label="A taco being built layer by layer" />
+      <video ref="video" class="clip" :src="src" :poster="poster" muted playsinline preload="auto" disablepictureinpicture aria-label="A burrito bowl being built layer by layer" />
 
       <!-- 3. Stickers, notes and the finale (in front) -->
       <div class="front" aria-hidden="true">
@@ -113,7 +113,7 @@ useMotion(root, ({ gsap, ScrollTrigger: ST, root: el }) => {
       <p class="sr-only" aria-live="polite">{{ steps[active].name }}. {{ steps[active].note }}</p>
     </div>
 
-    <ol v-if="!live" class="list wrap" aria-label="Making of a taco">
+    <ol v-if="!live" class="list wrap" aria-label="Making of a burrito bowl">
       <li v-for="s in steps" :key="s.name"><strong>{{ s.name }}</strong> · {{ s.note }}</li>
     </ol>
   </section>
@@ -122,7 +122,7 @@ useMotion(root, ({ gsap, ScrollTrigger: ST, root: el }) => {
 <style scoped>
 .taco { background: var(--ground); }
 .pin { position: relative; height: 100vh; height: 100svh; min-height: 520px; overflow: hidden; background: var(--ground); isolation: isolate; }
-.taco.is-live { height: calc(var(--n) * 62vh + 120vh); }
+.taco.is-live { height: calc(var(--n) * 52vh + 120vh); }
 .taco.is-live .pin { position: sticky; top: 0; }
 
 /* The footage fills the window. Its black blends into the ground; the type behind shows through it. */
@@ -133,9 +133,9 @@ useMotion(root, ({ gsap, ScrollTrigger: ST, root: el }) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 60%;
+  object-position: 50% 85%;
   transform: scale(1.04);
-  transform-origin: 50% 62%;
+  transform-origin: 50% 88%;
   mix-blend-mode: screen;
   pointer-events: none;
   transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -192,7 +192,7 @@ useMotion(root, ({ gsap, ScrollTrigger: ST, root: el }) => {
 
 .note { position: absolute; left: 0; right: 0; bottom: 74px; padding-inline: var(--gut-l); font-family: var(--f-script); font-size: clamp(24px, 3.6vw, 44px); line-height: 1.1; color: var(--lime); text-align: center; }
 
-/* ---- finale: "Folded & ready" ---- */
+/* ---- finale: "Ready to eat" ---- */
 .burst { position: absolute; left: 50%; top: 52%; width: 0; height: 0; }
 .spark { position: absolute; left: 0; top: 0; font-size: calc(var(--s) * clamp(18px, 3.4vmin, 40px)); color: var(--lime); opacity: 0; }
 .burst.go .spark { animation: spark 1.5s cubic-bezier(0.1, 0.7, 0.2, 1) both; animation-delay: calc(var(--k) * 35ms + 0.25s); }
@@ -239,7 +239,7 @@ useMotion(root, ({ gsap, ScrollTrigger: ST, root: el }) => {
 .is-finale .hud { opacity: 0; transition: opacity 0.3s; }
 .taco:not(.is-live) .hud { display: none; }
 
-/* ---- not live (no JS / reduced motion): one screen, finished taco, readable list ---- */
+/* ---- not live (no JS / reduced motion): one screen, finished bowl, readable list ---- */
 .taco:not(.is-live) .slide:not(.on) { display: none; }
 .taco:not(.is-live) .cta { opacity: 1; transform: none; pointer-events: auto; transition: none; }
 .taco:not(.is-live) .note { bottom: 96px; opacity: 1; }

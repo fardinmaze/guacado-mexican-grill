@@ -13,8 +13,8 @@ describe('tacoScroll', () => {
   it('maps clip time to the playing step', () => {
     expect(stepAt(steps, 0)).toBe(0)
     expect(stepAt(steps, 1.4)).toBe(1)
-    expect(stepAt(steps, 6.9)).toBe(5)
-    expect(stepAt(steps, 9.95)).toBe(steps.length - 1)
+    expect(stepAt(steps, 6.9)).toBe(4)
+    expect(stepAt(steps, 19.45)).toBe(steps.length - 1)
   })
   it('every step has tags with a known tone', () => {
     steps.forEach((s) => {
@@ -23,9 +23,9 @@ describe('tacoScroll', () => {
     })
   })
   it('scroll maps to the clip, then holds the last frame for the finale', () => {
-    expect(clipTime(0, 10)).toBe(0)
-    expect(clipTime(PLAY_SHARE, 10)).toBeCloseTo(9.95)
-    expect(clipTime(1, 10)).toBeCloseTo(9.95)
-    expect(clipTime(PLAY_SHARE / 2, 10)).toBeCloseTo(4.975)
+    expect(clipTime(0, 20)).toBe(0)
+    expect(clipTime(PLAY_SHARE, 20)).toBeCloseTo(19.95)
+    expect(clipTime(1, 20)).toBeCloseTo(19.95)
+    expect(clipTime(PLAY_SHARE / 2, 20)).toBeCloseTo(9.975)
   })
 })
